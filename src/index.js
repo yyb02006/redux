@@ -1,22 +1,27 @@
+import { configureStore } from '@reduxjs/toolkit';
+
 const plus = document.getElementById('plus');
 const minus = document.getElementById('minus');
 const number = document.querySelector('span');
 
-let count = 0;
-
-const updateText = () => {
-  number.innerText = count;
+const reducer = (count = 0, action) => {
+  switch (action.type) {
+    case 'PLUS':
+      return count + 1;
+    case 'MINUS':
+      return count - 1;
+    default:
+      return count;
+  }
 };
 
-const handlePlus = () => {
-  count++;
-  updateText();
+const countStore = configureStore({ reducer });
+
+const onChange = () => {
+  number.innerText = countStore.getState();
 };
 
-const handleMinus = () => {
-  count--;
-  updateText();
-};
+countStore.subscribe(onChange);
 
-plus.addEventListener('click', handlePlus);
-minus.addEventListener('click', handleMinus);
+plus.addEventListener('click', () => countStore.dispatch({ type: 'PLUS' }));
+minus.addEventListener('click', () => countStore.dispatch({ type: 'MINUS' }));
