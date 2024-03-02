@@ -1,27 +1,65 @@
 import { configureStore } from '@reduxjs/toolkit';
 
-const plus = document.getElementById('plus');
-const minus = document.getElementById('minus');
-const number = document.querySelector('span');
+const title = document.querySelector('h2');
+const add = document.querySelector('button');
+const input = document.querySelector('input');
+const ul = document.querySelector('ul');
 
-const reducer = (count = 0, action) => {
+const actionTypes = { add: 'add', del: 'delete' };
+
+const addToList = (text) => ({ type: actionTypes.add, text });
+
+const deleteToList = (id) => ({ type: actionTypes.del, id });
+
+const reducer = (states = [], action) => {
+  const { add, del } = actionTypes;
   switch (action.type) {
-    case 'PLUS':
-      return count + 1;
-    case 'MINUS':
-      return count - 1;
+    case add:
+      return [...states, { text: action.text, id: Date.now() }];
+    case del:
+      return states.filter((state) => state.id.toString() !== action.id.toString());
     default:
-      return count;
+      return states;
   }
 };
 
-const countStore = configureStore({ reducer });
+const listStore = configureStore({ reducer });
 
-const onChange = () => {
-  number.innerText = countStore.getState();
+const dispatchAddToList = (action) => {
+  if (!action.type || !action.text) return;
+  listStore.dispatch(action);
 };
 
-countStore.subscribe(onChange);
+const dispatchDeleteToList = (action) => {
+  if (!action.type || !action.id) return;
+  listStore.dispatch(action);
+};
 
-plus.addEventListener('click', () => countStore.dispatch({ type: 'PLUS' }));
-minus.addEventListener('click', () => countStore.dispatch({ type: 'MINUS' }));
+const onAddClick = (e) => {
+  e.preventDefault();
+  dispatchAddToList(addToList(input.value));
+  input.value = '';
+};
+
+const onDeleteClick = (e) => {
+  e.preventDefault();
+  const id = e.target.parentNode.id;
+  dispatchDeleteToList(deleteToList(id));
+};
+
+listStore.subscribe(() => {
+  const toDos = listStore.getState();
+  ul.innerHTML = '';
+  toDos.forEach((toDo) => {
+    const li = document.createElement('li');
+    const deleteBtn = document.createElement('button');
+    deleteBtn.innerText = 'delete';
+    li.id = toDo.id;
+    li.innerText = toDo.text;
+    li.appendChild(deleteBtn);
+    li.addEventListener('click', onDeleteClick);
+    ul.appendChild(li);
+  });
+});
+
+add.addEventListener('click', onAddClick);
