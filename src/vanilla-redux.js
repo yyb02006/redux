@@ -14,10 +14,14 @@ const deleteToList = (id) => ({ type: actionTypes.del, id });
 const reducer = (states = [], action) => {
   const { add, del } = actionTypes;
   switch (action.type) {
-    case add:
-      return [...states, { text: action.text, id: Date.now() }];
-    case del:
-      return states.filter((state) => state.id.toString() !== action.id.toString());
+    case add: {
+      const newState = { text: action.text, id: Date.now() };
+      return [...states, newState];
+    }
+    case del: {
+      const cleanedStates = states.filter((state) => state.id.toString() !== action.id.toString());
+      return cleanedStates;
+    }
     default:
       return states;
   }
