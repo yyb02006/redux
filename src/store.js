@@ -1,4 +1,4 @@
-import { configureStore, createAction, createReducer } from '@reduxjs/toolkit';
+import { configureStore, createAction, createReducer, createSlice } from '@reduxjs/toolkit';
 
 /* const addToDo = (text) => {
   if (typeof text !== 'string') return;
@@ -9,9 +9,6 @@ import { configureStore, createAction, createReducer } from '@reduxjs/toolkit';
   if (typeof id !== 'number') return;
   return { type: 'delete', id };
 }; */
-
-const addToDo = createAction('add');
-const deleteToDo = createAction('delete');
 
 /* const reducer = (state = [{ id: 3425, text: 'dfdf' }], action) => {
   switch (action.type) {
@@ -28,19 +25,31 @@ const deleteToDo = createAction('delete');
   }
 }; */
 
+/* const addToDo = createAction('add');
+const deleteToDo = createAction('delete');
+
 const reducer = createReducer([], {
   //함수의 리턴이 undefined일 때, state를 가져다쓰는 건 immer기능
   [addToDo]: (state, action) => {
     state.push({ text: action.payload, id: Date.now() });
   },
   [deleteToDo]: (state, action) => state.filter((toDo) => toDo.id !== action.payload),
+}); */
+
+const toDoSlice = createSlice({
+  name: 'toDo',
+  initialState: [],
+  reducers: {
+    add: (state, action) => {
+      state.push({ text: action.payload, id: Date.now() });
+    },
+    remove: (state, action) => state.filter((toDo) => toDo.id !== action.payload),
+  },
 });
 
-const store = configureStore({ reducer });
+//Can use redux developer tools
+const store = configureStore({ reducer: toDoSlice.reducer });
 
-export const actionCreators = {
-  addToDo,
-  deleteToDo,
-};
+export const { add, remove } = toDoSlice.actions;
 
 export default store;
