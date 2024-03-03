@@ -1,24 +1,16 @@
 import { configureStore } from '@reduxjs/toolkit';
 
-export type State = Array<{ text: string; id: number }>;
-
-export type ActionTypes = 'add' | 'delete';
-
-export interface ActionProps {
-  type: ActionTypes;
-  text?: string;
-  id?: number;
-}
-
-const addToDo = (text: string): Omit<ActionProps, 'id'> => {
-  return { type: 'add', text };
+const addToDo = (text) => {
+  if (typeof text !== 'string') return;
+  return { type: 'add', id: Date.now(), text };
 };
 
-const deleteToDo = (id: number): Omit<ActionProps, 'text'> => {
+const deleteToDo = (id) => {
+  if (typeof id !== 'number') return;
   return { type: 'add', id };
 };
 
-const reducer = (state: State = [], action: ActionProps) => {
+const reducer = (state = [{ id: 3425, text: 'dfdf' }], action) => {
   switch (action.type) {
     case 'add': {
       if (action.text === undefined) return state;
@@ -34,5 +26,10 @@ const reducer = (state: State = [], action: ActionProps) => {
 };
 
 const store = configureStore({ reducer });
+
+export const actionCreators = {
+  addToDo,
+  deleteToDo,
+};
 
 export default store;

@@ -15,5 +15,5 @@
     "sourceType": "module"
   },
   "plugins": ["@typescript-eslint", "react"],
-  "rules": { "@typescript-eslint/no-unused-vars": "off" }
+  "rules": { "@typescript-eslint/no-unused-vars": "off", "react/prop-types": "off" }
 }
