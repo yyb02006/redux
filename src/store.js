@@ -7,7 +7,7 @@ const addToDo = (text) => {
 
 const deleteToDo = (id) => {
   if (typeof id !== 'number') return;
-  return { type: 'add', id };
+  return { type: 'delete', id };
 };
 
 const reducer = (state = [{ id: 3425, text: 'dfdf' }], action) => {
