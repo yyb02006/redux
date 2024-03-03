@@ -1,14 +1,15 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { actionCreators } from '../store';
+import { Link } from 'react-router-dom';
 
-const ToDo = ({ text, deleteToDo }) => {
+const ToDo = ({ text, deleteToDo, id }) => {
   const onDeleteClick = () => {
     deleteToDo();
   };
   return (
     <li>
-      {text}{' '}
+      <Link to={`/${id}`}>{text}</Link>{' '}
       <button type="button" onClick={onDeleteClick}>
         Delete
       </button>
