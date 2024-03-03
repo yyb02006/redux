@@ -1,8 +1,9 @@
 import React, { ChangeEvent, useState, MouseEvent } from 'react';
+import { State } from '../store';
 
 export default function Home() {
   const [text, setText] = useState('');
-  const [toDos, setToDos] = useState<Array<{ text: string; id: number }>>([]);
+  const [toDos, setToDos] = useState<State>([]);
   const onTextChange = (e: ChangeEvent<HTMLInputElement>) => {
     setText(e.target.value);
   };
