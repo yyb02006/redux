@@ -1,4 +1,4 @@
-import { configureStore, createAction, createReducer, createSlice } from '@reduxjs/toolkit';
+import { Action, ThunkAction, configureStore, createSlice } from '@reduxjs/toolkit';
 
 /* const addToDo = (text) => {
   if (typeof text !== 'string') return;
@@ -36,9 +36,16 @@ const reducer = createReducer([], {
   [deleteToDo]: (state, action) => state.filter((toDo) => toDo.id !== action.payload),
 }); */
 
+export interface ToDoState {
+  text: string;
+  id: number;
+}
+
+const initialState: ToDoState[] = [];
+
 const toDoSlice = createSlice({
   name: 'toDo',
-  initialState: [],
+  initialState,
   reducers: {
     add: (state, action) => {
       state.push({ text: action.payload, id: Date.now() });
@@ -49,6 +56,15 @@ const toDoSlice = createSlice({
 
 //Can use redux developer tools
 const store = configureStore({ reducer: toDoSlice.reducer });
+
+export type AppDispatch = typeof store.dispatch;
+export type RootState = ReturnType<typeof store.getState>;
+export type AppThunk<ReturnType = void> = ThunkAction<
+  ReturnType,
+  RootState,
+  unknown,
+  Action<string>
+>;
 
 export const { add, remove } = toDoSlice.actions;
 
