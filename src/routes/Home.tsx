@@ -1,7 +1,24 @@
 import React, { ChangeEvent, useState } from 'react';
-import { ToDoDispatch, ToDoState, add } from '../store';
-import { connect } from 'react-redux';
+import { ToDoState, add } from '../store';
 import ToDo from '../components/ToDo';
+import { useToDoDispatch, useToDoSelector } from '../hooks/reduxHooks';
+
+/* 
+기본적으로 아래처럼 사용할 수 있지만, 편의성을 위해 커스텀 훅의 사용을 추천
+
+connect(mapStateToProps, mapDispatchToProps)(Home);
+
+const mapSelectToProps = (state: ToDoStateProps[]) => {
+  return { toDos:state };
+};
+
+const mapDispatchToProps = (dispatch: ToDoDispatch) => {
+  return {
+    addToDo: (text: string) => {
+      dispatch(add(text));
+    },
+  };
+};
 
 type AddToDo = (text: string) => void;
 
@@ -9,15 +26,18 @@ interface HomeProps {
   toDos: ToDoState;
   addToDo: AddToDo;
 }
+*/
 
-const Home = ({ toDos, addToDo }: HomeProps) => {
+const Home = () => {
+  const toDos = useToDoSelector((ste: ToDoState) => ste.toDos);
+  const dispatch = useToDoDispatch();
   const [text, setText] = useState('');
   const onTextChange = (e: ChangeEvent<HTMLInputElement>) => {
     setText(e.target.value);
   };
   const onAddClick = () => {
     setText('');
-    addToDo(text);
+    dispatch(add(text));
   };
   const onDeleteClick = (id: number) => {};
   return (
@@ -53,16 +73,4 @@ const Home = ({ toDos, addToDo }: HomeProps) => {
   );
 };
 
-const mapStateToProps = (state: ToDoState) => {
-  return { toDos: state };
-};
-
-const mapDispatchToProps = (dispatch: ToDoDispatch) => {
-  return {
-    addToDo: (text: string) => {
-      dispatch(add(text));
-    },
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Home);
+export default Home;

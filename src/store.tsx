@@ -1,16 +1,19 @@
 import { Action, PayloadAction, ThunkAction, configureStore, createSlice } from '@reduxjs/toolkit';
 
-/* const addToDo = (text) => {
+/* 
+***** 원시적인 리듀서 생성 방법
+
+const addToDo = (text) => {
   if (typeof text !== 'string') return;
   return { type: 'add', id: Date.now(), text };
-}; */
+};
 
-/* const deleteToDo = (id) => {
+const deleteToDo = (id) => {
   if (typeof id !== 'number') return;
   return { type: 'delete', id };
-}; */
+};
 
-/* const reducer = (state = [{ id: 3425, text: 'dfdf' }], action) => {
+const reducer = (state = [{ id: 3425, text: 'dfdf' }], action) => {
   switch (action.type) {
     case addToDo.type: {
       if (action.payload === undefined) return state;
@@ -23,9 +26,13 @@ import { Action, PayloadAction, ThunkAction, configureStore, createSlice } from 
     default:
       return state;
   }
-}; */
+}; 
+*/
 
-/* const addToDo = createAction('add');
+/* 
+***** createAction과 createReducer함수로 생성 가능
+
+const addToDo = createAction('add');
 const deleteToDo = createAction('delete');
 
 const reducer = createReducer([], {
@@ -34,24 +41,35 @@ const reducer = createReducer([], {
     state.push({ text: action.payload, id: Date.now() });
   },
   [deleteToDo]: (state, action) => state.filter((toDo) => toDo.id !== action.payload),
-}); */
+}); 
+*/
 
 export interface ToDoStateProps {
   text: string;
   id: number;
 }
 
-const initialState: ToDoStateProps[] = [];
+// rootState를 사용하지 않는 것을 추천하기 때문에 하위 프로퍼티 생성
+const initialState: { toDos: ToDoStateProps[] } = { toDos: [] };
+
+/* 
+***** 슬라이스함수 바깥에 케이스리듀서 작성 가능
+
+const add: CaseReducer<ToDoStateProps[], PayloadAction<string>> = (state, action) => {
+  state.push({ text: action.payload, id: Date.now() });
+}; 
+*/
 
 const toDoSlice = createSlice({
   name: 'toDo',
   initialState,
   reducers: {
     add: (state, action: PayloadAction<string>) => {
-      state.push({ text: action.payload, id: Date.now() });
+      state.toDos.push({ text: action.payload, id: Date.now() });
     },
-    remove: (state, action: PayloadAction<number>) =>
-      state.filter((toDo) => toDo.id !== action.payload),
+    remove: (state, action: PayloadAction<number>) => ({
+      toDos: state.toDos.filter((toDo) => toDo.id !== action.payload),
+    }),
   },
 });
 
@@ -64,7 +82,7 @@ const store = configureStore({ reducer: toDoSlice.reducer });
 //호출가능 객체(callable object) type과 paylaod를 가진 action을 리턴하며 match, toString, type과 같은 프로퍼티를 가지고 있음
 // console.log(actions);
 
-//각 리듀서들
+//각 케이스 리듀서들
 //console.log(caseReducers);
 
 //슬라이스객체의 이름
