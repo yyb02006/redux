@@ -1,5 +1,5 @@
 import React, { ChangeEvent, useState } from 'react';
-import { ToDoState, add } from '../store';
+import { ActionTarget, ToDoState, add } from '../store';
 import ToDo from '../components/ToDo';
 import { useToDoDispatch, useToDoSelector } from '../hooks/reduxHooks';
 
@@ -28,8 +28,10 @@ interface HomeProps {
 }
 */
 
-const Home = () => {
-  const toDos = useToDoSelector((ste: ToDoState) => ste.toDos);
+// 리덕스는 Provider의 아래에 있는 데이터가 변하더라도 컴포넌트가 해당 데이터를 참조하고 있을 때만 리렌더링이 일어난다.
+// 이는 useContext와 확실히 다르다.
+const List = ({ target }: { target: ActionTarget }) => {
+  const toDos = useToDoSelector((state: ToDoState) => state[target]);
   const dispatch = useToDoDispatch();
   const [text, setText] = useState('');
   const onTextChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -37,40 +39,32 @@ const Home = () => {
   };
   const onAddClick = () => {
     setText('');
-    dispatch(add(text));
+    dispatch(add({ data: text, target }));
   };
-  const onDeleteClick = (id: number) => {};
+  console.log(`${target} Rendered!!`);
   return (
     <section>
-      <div style={{ fontSize: '4rem', fontWeight: '600' }}>To Do List</div>
       <input type="text" placeholder="add your plan" value={text} onChange={onTextChange} />
       <button type="button" onClick={onAddClick}>
         add
       </button>
       <ul>
         {toDos.map((todo) => (
-          <ToDo key={todo.id} text={todo.text} id={todo.id} />
+          <ToDo key={todo.id} data={todo} target={target} />
         ))}
-        {/* {toDos.map((todo) => {
-          const { id, text } = todo;
-          return (
-            <li key={id}>
-              {text}
-              <button
-                type="button"
-                onClick={(e) => {
-                  e.preventDefault();
-                  onDeleteClick(id);
-                }}
-              >
-                delete
-              </button>
-            </li>
-          );
-        })} */}
       </ul>
     </section>
   );
 };
 
-export default Home;
+export default function Home() {
+  return (
+    <section>
+      <div style={{ fontSize: '4rem', fontWeight: '600', textAlign: 'center' }}>To Do List</div>
+      <div style={{ display: 'flex', justifyContent: 'space-around' }}>
+        <List target="me" />
+        <List target="friend" />
+      </div>
+    </section>
+  );
+}

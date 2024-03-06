@@ -1,19 +1,17 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { ToDoDispatch, ToDoStateProps, remove } from '../store';
+import { ActionTarget, ToDoStateProps, remove } from '../store';
 import { Link } from 'react-router-dom';
-
-type DeleteToDo = () => void;
+import { useToDoDispatch } from '../hooks/reduxHooks';
 
 interface ToDoProps {
-  text: string;
-  deleteToDo: DeleteToDo;
-  id: number;
+  data: ToDoStateProps;
+  target: ActionTarget;
 }
 
-const ToDo = ({ text, deleteToDo, id }: ToDoProps) => {
+export default function ToDo({ data: { id, text }, target }: ToDoProps) {
+  const dispatch = useToDoDispatch();
   const onDeleteClick = () => {
-    deleteToDo();
+    dispatch(remove({ data: id, target }));
   };
   return (
     <li>
@@ -23,9 +21,9 @@ const ToDo = ({ text, deleteToDo, id }: ToDoProps) => {
       </button>
     </li>
   );
-};
+}
 
-const mapDispatchToProps = (dispatch: ToDoDispatch, ownProps: ToDoStateProps) => {
+/* const mapDispatchToProps = (dispatch: ToDoDispatch, ownProps: ToDoStateProps) => {
   // to be able to refer to a Callable Object. example: remove.type === "toDo/remove"
   console.log(remove.type);
   // also able to call a function remove Object. example: remove.match({type:'toDo/remove'}) === true
@@ -35,6 +33,4 @@ const mapDispatchToProps = (dispatch: ToDoDispatch, ownProps: ToDoStateProps) =>
       dispatch(remove(ownProps.id));
     },
   };
-};
-
-export default connect(() => ({}), mapDispatchToProps)(ToDo);
+}; */

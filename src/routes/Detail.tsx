@@ -1,15 +1,16 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { ToDoDispatch, remove } from '../store';
+import { remove } from '../store';
+import { useToDoDispatch } from '../hooks/reduxHooks';
 
-type DeleteTodo = (id: number) => void;
+/* type DeleteTodo = (id: number) => void;
 
 interface DetailProps {
   deleteToDo: DeleteTodo;
-}
+} */
 
-const Detail = ({ deleteToDo }: DetailProps) => {
+export default function Detail() {
+  const dispatch = useToDoDispatch();
   const { id } = useParams();
   return (
     <section>
@@ -19,21 +20,11 @@ const Detail = ({ deleteToDo }: DetailProps) => {
         type="button"
         onClick={() => {
           if (typeof id !== 'number') return;
-          deleteToDo(parseInt(id));
+          dispatch(remove({ data: parseInt(id), target: 'me' }));
         }}
       >
         delete
       </button>
     </section>
   );
-};
-
-const mapDispatchToProps = (dispatch: ToDoDispatch) => {
-  return {
-    deleteToDo: (id: number) => {
-      dispatch(remove(id));
-    },
-  };
-};
-
-export default connect(() => ({}), mapDispatchToProps)(Detail);
+}

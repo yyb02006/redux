@@ -1,6 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
 
-const title = document.querySelector('h2');
 const add = document.querySelector('button');
 const input = document.querySelector('input');
 const ul = document.querySelector('ul');

@@ -49,8 +49,15 @@ export interface ToDoStateProps {
   id: number;
 }
 
+export type ActionTarget = 'me' | 'friend';
+
+interface PayloadProps<T> {
+  data: T;
+  target: ActionTarget;
+}
+
 // rootState를 사용하지 않는 것을 추천하기 때문에 하위 프로퍼티 생성
-const initialState: { toDos: ToDoStateProps[] } = { toDos: [] };
+const initialState: Record<ActionTarget, ToDoStateProps[]> = { me: [], friend: [] };
 
 /* 
 ***** 슬라이스함수 바깥에 케이스리듀서 작성 가능
@@ -64,12 +71,17 @@ const toDoSlice = createSlice({
   name: 'toDo',
   initialState,
   reducers: {
-    add: (state, action: PayloadAction<string>) => {
-      state.toDos.push({ text: action.payload, id: Date.now() });
+    add: (state, action: PayloadAction<PayloadProps<string>>) => {
+      const { data, target } = action.payload;
+      state[target].push({ text: data, id: Date.now() });
     },
-    remove: (state, action: PayloadAction<number>) => ({
-      toDos: state.toDos.filter((toDo) => toDo.id !== action.payload),
-    }),
+    remove: (state, action: PayloadAction<PayloadProps<number>>) => {
+      const { data, target } = action.payload;
+      return {
+        ...state,
+        [target]: state[target].filter((toDo) => toDo.id !== data),
+      };
+    },
   },
 });
 
