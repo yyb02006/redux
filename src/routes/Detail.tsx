@@ -1,9 +1,15 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { remove } from '../store';
+import { ToDoDispatch, remove } from '../store';
 
-const Detail = ({ deleteToDo }) => {
+type DeleteTodo = (id: number) => void;
+
+interface DetailProps {
+  deleteToDo: DeleteTodo;
+}
+
+const Detail = ({ deleteToDo }: DetailProps) => {
   const { id } = useParams();
   return (
     <section>
@@ -12,6 +18,7 @@ const Detail = ({ deleteToDo }) => {
       <button
         type="button"
         onClick={() => {
+          if (typeof id !== 'number') return;
           deleteToDo(parseInt(id));
         }}
       >
@@ -21,9 +28,9 @@ const Detail = ({ deleteToDo }) => {
   );
 };
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch: ToDoDispatch) => {
   return {
-    deleteToDo: (id) => {
+    deleteToDo: (id: number) => {
       dispatch(remove(id));
     },
   };

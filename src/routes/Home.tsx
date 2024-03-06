@@ -1,18 +1,25 @@
-import React, { useState } from 'react';
-import { add } from '../store';
+import React, { ChangeEvent, useState } from 'react';
+import { ToDoDispatch, ToDoState, add } from '../store';
 import { connect } from 'react-redux';
 import ToDo from '../components/ToDo';
 
-const Home = ({ toDos, addToDo }) => {
+type AddToDo = (text: string) => void;
+
+interface HomeProps {
+  toDos: ToDoState;
+  addToDo: AddToDo;
+}
+
+const Home = ({ toDos, addToDo }: HomeProps) => {
   const [text, setText] = useState('');
-  const onTextChange = (e) => {
+  const onTextChange = (e: ChangeEvent<HTMLInputElement>) => {
     setText(e.target.value);
   };
   const onAddClick = () => {
     setText('');
     addToDo(text);
   };
-  const onDeleteClick = (id) => {};
+  const onDeleteClick = (id: number) => {};
   return (
     <section>
       <div style={{ fontSize: '4rem', fontWeight: '600' }}>To Do List</div>
@@ -46,12 +53,16 @@ const Home = ({ toDos, addToDo }) => {
   );
 };
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state: ToDoState) => {
   return { toDos: state };
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return { addToDo: (text) => dispatch(add(text)) };
+const mapDispatchToProps = (dispatch: ToDoDispatch) => {
+  return {
+    addToDo: (text: string) => {
+      dispatch(add(text));
+    },
+  };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);
