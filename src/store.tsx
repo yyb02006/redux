@@ -1,4 +1,14 @@
-import { Action, PayloadAction, ThunkAction, configureStore, createSlice } from '@reduxjs/toolkit';
+import {
+  Action,
+  ActionCreatorWithPayload,
+  AnyAction,
+  PayloadAction,
+  ThunkAction,
+  ThunkDispatch,
+  configureStore,
+  createSlice,
+} from '@reduxjs/toolkit';
+import { Dispatch } from 'react';
 
 /* 
 ***** 원시적인 리듀서 생성 방법
