@@ -1,6 +1,7 @@
 import React, { memo } from 'react';
 import { useToDoDispatch, useToDoSelector } from '../hooks/reduxHooks';
-import { add } from '../store';
+import { add, increment } from '../store';
+import { useSelector } from 'react-redux';
 
 const Child = memo(function Child() {
   const toDos = useToDoSelector((state) => state.toDo.friend);
@@ -21,6 +22,8 @@ const Child = memo(function Child() {
 
 const Parent = () => {
   const toDos = useToDoSelector((state) => state.toDo.me);
+  const counter = useToDoSelector((state) => state.counter);
+  console.log(counter.count);
   const dispatch = useToDoDispatch();
   console.log('Parent Component Rendered');
   return (
@@ -33,6 +36,7 @@ const Parent = () => {
       }}
       onClick={() => {
         dispatch(add({ data: 'Parent', target: 'me' }));
+        dispatch(increment());
       }}
     >
       Parent

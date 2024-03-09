@@ -6,6 +6,7 @@ import {
   ThunkAction,
   ThunkDispatch,
   configureStore,
+  createAction,
   createSlice,
 } from '@reduxjs/toolkit';
 import { Dispatch } from 'react';
@@ -99,6 +100,20 @@ const toDoSlice = createSlice({
       };
     },
   },
+  // counterSlice에서 toDoSlice의 상태에 접근 가능.
+  // extraReducers는 외부 액션을 받을 수 있기 때문에 공통액션을 createAction으로 외부에서 생성하는 방법도 있음.
+  extraReducers: (builder) => {
+    builder
+      .addCase('counter/increment', (state) => {
+        console.log('increment');
+      })
+      .addCase('counter/decrement', (state) => {
+        console.log('decrement');
+      })
+      .addDefaultCase(() => {
+        console.log('default');
+      });
+  },
 });
 
 const counterSlice = createSlice({
@@ -148,5 +163,6 @@ export type ToDoThunk<ReturnType = void> = ThunkAction<
 
 //There are callable objects
 export const { add, remove } = toDoSlice.actions;
+export const { increment, decrement } = counterSlice.actions;
 
 export default store;
