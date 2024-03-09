@@ -61,13 +61,19 @@ export interface ToDoStateProps {
 
 export type ActionTarget = 'me' | 'friend';
 
+export interface CounterStateProps {
+  count: number;
+}
+
 interface PayloadProps<T> {
   data: T;
   target: ActionTarget;
 }
 
 // rootState를 사용하지 않는 것을 추천하기 때문에 하위 프로퍼티 생성
-const initialState: Record<ActionTarget, ToDoStateProps[]> = { me: [], friend: [] };
+const toDoInitialState: Record<ActionTarget, ToDoStateProps[]> = { me: [], friend: [] };
+
+const counterInitialState = { count: 0 };
 
 /* 
 ***** 슬라이스함수 바깥에 케이스리듀서 작성 가능
@@ -79,7 +85,7 @@ const add: CaseReducer<ToDoStateProps[], PayloadAction<string>> = (state, action
 
 const toDoSlice = createSlice({
   name: 'toDo',
-  initialState,
+  initialState: toDoInitialState,
   reducers: {
     add: (state, action: PayloadAction<PayloadProps<string>>) => {
       const { data, target } = action.payload;
@@ -95,8 +101,23 @@ const toDoSlice = createSlice({
   },
 });
 
+const counterSlice = createSlice({
+  name: 'counter',
+  initialState: counterInitialState,
+  reducers: {
+    increment: (state) => {
+      state.count++;
+    },
+    decrement: (state) => {
+      state.count--;
+    },
+  },
+});
+
 //Can use redux developer tools
-const store = configureStore({ reducer: toDoSlice.reducer });
+const store = configureStore({
+  reducer: { toDo: toDoSlice.reducer, counter: counterSlice.reducer },
+});
 
 //toDoSlice의 프로퍼티들
 //const { actions, caseReducers, name, getInitialState, reducer } = toDoSlice;

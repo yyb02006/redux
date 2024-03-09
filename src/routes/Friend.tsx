@@ -3,7 +3,7 @@ import { useToDoDispatch, useToDoSelector } from '../hooks/reduxHooks';
 import { add } from '../store';
 
 const Child = memo(function Child() {
-  const toDos = useToDoSelector((state) => state.friend);
+  const toDos = useToDoSelector((state) => state.toDo.friend);
   console.log('Child Component Rendered');
   return (
     <section
@@ -20,7 +20,7 @@ const Child = memo(function Child() {
 });
 
 const Parent = () => {
-  const toDos = useToDoSelector((state) => state.me);
+  const toDos = useToDoSelector((state) => state.toDo.me);
   const dispatch = useToDoDispatch();
   console.log('Parent Component Rendered');
   return (

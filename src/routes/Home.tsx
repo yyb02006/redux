@@ -31,7 +31,7 @@ interface HomeProps {
 // 리덕스는 Provider의 아래에 있는 데이터가 변하더라도 컴포넌트가 해당 데이터를 참조하고 있을 때만 리렌더링이 일어난다.
 // 이는 useContext와 확실히 다르다.
 const List = ({ target }: { target: ActionTarget }) => {
-  const toDos = useToDoSelector((state: ToDoState) => state[target]);
+  const toDos = useToDoSelector((state: ToDoState) => state.toDo[target]);
   const dispatch = useToDoDispatch();
   const [text, setText] = useState('');
   const onTextChange = (e: ChangeEvent<HTMLInputElement>) => {
