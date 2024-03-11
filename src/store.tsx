@@ -9,7 +9,8 @@ import {
   createAction,
   createSlice,
 } from '@reduxjs/toolkit';
-import { Dispatch } from 'react';
+import toDoReducer from './features/toDo/toDoSlice';
+import toDoCounterReducer from './features/toDo/counterSlice';
 
 /* 
 ***** 원시적인 리듀서 생성 방법
@@ -55,83 +56,9 @@ const reducer = createReducer([], {
 }); 
 */
 
-export interface ToDoStateProps {
-  text: string;
-  id: number;
-}
-
-export type ActionTarget = 'me' | 'friend';
-
-export interface CounterStateProps {
-  count: number;
-}
-
-interface PayloadProps<T> {
-  data: T;
-  target: ActionTarget;
-}
-
-// rootState를 사용하지 않는 것을 추천하기 때문에 하위 프로퍼티 생성
-const toDoInitialState: Record<ActionTarget, ToDoStateProps[]> = { me: [], friend: [] };
-
-const counterInitialState = { count: 0 };
-
-/* 
-***** 슬라이스함수 바깥에 케이스리듀서 작성 가능
-
-const add: CaseReducer<ToDoStateProps[], PayloadAction<string>> = (state, action) => {
-  state.push({ text: action.payload, id: Date.now() });
-}; 
-*/
-
-const toDoSlice = createSlice({
-  name: 'toDo',
-  initialState: toDoInitialState,
-  reducers: {
-    add: (state, action: PayloadAction<PayloadProps<string>>) => {
-      const { data, target } = action.payload;
-      state[target].push({ text: data, id: Date.now() });
-    },
-    remove: (state, action: PayloadAction<PayloadProps<number>>) => {
-      const { data, target } = action.payload;
-      return {
-        ...state,
-        [target]: state[target].filter((toDo) => toDo.id !== data),
-      };
-    },
-  },
-  // counterSlice에서 toDoSlice의 상태에 접근 가능.
-  // extraReducers는 외부 액션을 받을 수 있기 때문에 공통액션을 createAction으로 외부에서 생성하는 방법도 있음.
-  extraReducers: (builder) => {
-    builder
-      .addCase('counter/increment', (state) => {
-        console.log('increment');
-      })
-      .addCase('counter/decrement', (state) => {
-        console.log('decrement');
-      })
-      .addDefaultCase(() => {
-        console.log('default');
-      });
-  },
-});
-
-const counterSlice = createSlice({
-  name: 'counter',
-  initialState: counterInitialState,
-  reducers: {
-    increment: (state) => {
-      state.count++;
-    },
-    decrement: (state) => {
-      state.count--;
-    },
-  },
-});
-
 //Can use redux developer tools
 const store = configureStore({
-  reducer: { toDo: toDoSlice.reducer, counter: counterSlice.reducer },
+  reducer: { toDo: toDoReducer, counter: toDoCounterReducer },
 });
 
 //toDoSlice의 프로퍼티들
@@ -162,7 +89,5 @@ export type ToDoThunk<ReturnType = void> = ThunkAction<
 >;
 
 //There are callable objects
-export const { add, remove } = toDoSlice.actions;
-export const { increment, decrement } = counterSlice.actions;
 
 export default store;

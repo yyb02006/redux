@@ -1,7 +1,7 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import { remove } from '../store';
 import { useToDoDispatch } from '../hooks/reduxHooks';
+import { remove } from '../features/toDo/toDoSlice';
 
 /* type DeleteTodo = (id: number) => void;
 

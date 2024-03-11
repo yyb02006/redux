@@ -1,7 +1,7 @@
 import React, { memo } from 'react';
 import { useToDoDispatch, useToDoSelector } from '../hooks/reduxHooks';
-import { add, increment } from '../store';
-import { useSelector } from 'react-redux';
+import { add } from '../features/toDo/toDoSlice';
+import { increment } from '../features/toDo/counterSlice';
 
 const Child = memo(function Child() {
   const toDos = useToDoSelector((state) => state.toDo.friend);
@@ -37,6 +37,7 @@ const Parent = () => {
       onClick={() => {
         dispatch(add({ data: 'Parent', target: 'me' }));
         dispatch(increment());
+        console.log(increment());
       }}
     >
       Parent

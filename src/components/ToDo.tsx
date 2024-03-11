@@ -1,7 +1,7 @@
 import React from 'react';
-import { ActionTarget, ToDoStateProps, remove } from '../store';
 import { Link } from 'react-router-dom';
 import { useToDoDispatch } from '../hooks/reduxHooks';
+import { ActionTarget, ToDoStateProps, remove } from '../features/toDo/toDoSlice';
 
 interface ToDoProps {
   data: ToDoStateProps;

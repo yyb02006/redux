@@ -1,7 +1,8 @@
 import React, { ChangeEvent, useState } from 'react';
-import { ActionTarget, ToDoState, add } from '../store';
+import { ToDoState } from '../store';
 import ToDo from '../components/ToDo';
 import { useToDoDispatch, useToDoSelector } from '../hooks/reduxHooks';
+import { ActionTarget, add } from '../features/toDo/toDoSlice';
 
 /* 
 기본적으로 아래처럼 사용할 수 있지만, 편의성을 위해 커스텀 훅의 사용을 추천
