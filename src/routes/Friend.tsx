@@ -20,6 +20,38 @@ const Child = memo(function Child() {
   );
 });
 
+/* 
+useDispatch의 대략적인 느낌
+function useDispatch() {
+  const { reducers, dispatch, getState } = store;
+  return (actionOrFunction) => {
+    switch (typeof actionOrFunction) {
+      case 'object':
+        reducers[actionOrFunction.type](actionOrFunction.data);
+        break;
+      case 'function':
+        break;
+        actionOrFunction(dispatch,getState);
+      default:
+        console.log('error');
+        break;
+    }
+  };
+}
+*/
+
+/* 
+thunk미들웨어의 대략적인 느낌
+const thunkMiddleware = createThunkMiddleware(extraArg);
+
+function thunkMiddleware(thunkMiddleware, secondMiddleware) {
+  const dispatch = dispatchFromStore();
+  const getState = stateFromStore();
+  const action = actionFromReducer();
+  thunkMiddleware(dispatch,getState)(secondMiddleware)(action);
+}
+*/
+
 const Parent = () => {
   const toDos = useToDoSelector((state) => state.toDo.me);
   const counter = useToDoSelector((state) => state.counter);

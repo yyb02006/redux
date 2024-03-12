@@ -1,4 +1,6 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { AppThunk } from '../../app/store';
+import { ToDoState, ToDoThunk } from '../../store';
 
 export type ActionTarget = 'me' | 'friend';
 
@@ -56,6 +58,20 @@ const toDoSlice = createSlice({
 });
 
 export const { add, remove } = toDoSlice.actions;
+
+const myText = (state: ToDoState) => state.toDo.me;
+
+// thunk미들웨어
+export const addIfNotString =
+  (text: string): ToDoThunk =>
+  (dispatch, getState) => {
+    const currentText = myText(getState());
+    if (currentText.length > 0) {
+      dispatch(add({ data: text, target: 'me' }));
+    } else {
+      console.log('fail');
+    }
+  };
 
 const toDoReducer = toDoSlice.reducer;
 

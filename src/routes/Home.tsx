@@ -2,7 +2,7 @@ import React, { ChangeEvent, useState } from 'react';
 import { ToDoState } from '../store';
 import ToDo from '../components/ToDo';
 import { useToDoDispatch, useToDoSelector } from '../hooks/reduxHooks';
-import { ActionTarget, add } from '../features/toDo/toDoSlice';
+import { ActionTarget, add, addIfNotString } from '../features/toDo/toDoSlice';
 
 /* 
 기본적으로 아래처럼 사용할 수 있지만, 편의성을 위해 커스텀 훅의 사용을 추천
@@ -42,7 +42,8 @@ const List = ({ target }: { target: ActionTarget }) => {
     setText('');
     dispatch(add({ data: text, target }));
   };
-  console.log(`${target} Rendered!!`);
+  const test = addIfNotString('something');
+  console.log(addIfNotString('something'));
   return (
     <section>
       <input type="text" placeholder="add your plan" value={text} onChange={onTextChange} />
