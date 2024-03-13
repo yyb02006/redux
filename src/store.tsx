@@ -11,6 +11,8 @@ import {
 } from '@reduxjs/toolkit';
 import toDoReducer from './features/toDo/toDoSlice';
 import toDoCounterReducer from './features/toDo/counterSlice';
+import counterA from './examples/counterA';
+import counterB from './examples/counterB';
 
 /* 
 ***** 원시적인 리듀서 생성 방법
@@ -58,7 +60,7 @@ const reducer = createReducer([], {
 
 //Can use redux developer tools
 const store = configureStore({
-  reducer: { toDo: toDoReducer, counter: toDoCounterReducer },
+  reducer: { toDo: toDoReducer, counter: toDoCounterReducer, counterA, counterB },
 });
 
 //toDoSlice의 프로퍼티들

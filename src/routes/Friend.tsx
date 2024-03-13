@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React, { memo, useEffect } from 'react';
 import { useToDoDispatch, useToDoSelector } from '../hooks/reduxHooks';
 import { add } from '../features/toDo/toDoSlice';
 import { increment } from '../features/toDo/counterSlice';
@@ -50,6 +50,27 @@ function thunkMiddleware(thunkMiddleware, secondMiddleware) {
   const action = actionFromReducer();
   thunkMiddleware(dispatch,getState)(secondMiddleware)(action);
 }
+*/
+
+/* 
+컴포넌트에서는 아래처럼 직접 참조를 할당하는 것 대신
+커스텀 훅으로 참조를 반환하게 하는 것이 좋다.
+const someComponent = () => {
+  const [count, setCount] = useState(0);
+  const dispatch = store.dispatch;
+  useEffect(() => {
+    dispatch({ type: 'count', data: count });
+  }, [dispatch, count]);
+  return (
+    <div
+      onClick={() => {
+        setCount((p) => p + 1);
+      }}
+    >
+      Click
+    </div>
+  );
+};
 */
 
 const Parent = () => {
