@@ -1,5 +1,10 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { AppThunk } from '../../app/store';
+import {
+  ActionReducerMapBuilder,
+  CaseReducerActions,
+  PayloadAction,
+  createAsyncThunk,
+  createSlice,
+} from '@reduxjs/toolkit';
 import { ToDoState, ToDoThunk } from '../../store';
 
 export type ActionTarget = 'me' | 'friend';
@@ -25,6 +30,33 @@ const add: CaseReducer<ToDoStateProps[], PayloadAction<string>> = (state, action
 }; 
 */
 
+const promiseText = (text: string) =>
+  new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(text);
+    }, 5000);
+  });
+
+export const addAsync = createAsyncThunk('toDo/addAsync', async (text: string) => {
+  const response = await promiseText(text);
+  return response;
+});
+
+const handleAddAsyncReducers = (
+  builder: ActionReducerMapBuilder<Record<ActionTarget, ToDoStateProps[]>>
+) => {
+  builder
+    .addCase(addAsync.pending, (state) => {
+      console.log('addPending');
+    })
+    .addCase(addAsync.fulfilled, (state) => {
+      console.log('addFulfilled');
+    })
+    .addCase(addAsync.rejected, (state) => {
+      console.log('addRejected');
+    });
+};
+
 const toDoSlice = createSlice({
   name: 'toDo',
   initialState: toDoInitialState,
@@ -44,6 +76,7 @@ const toDoSlice = createSlice({
   // counterSlice에서 toDoSlice의 상태에 접근 가능.
   // extraReducers는 외부 액션을 받을 수 있기 때문에 공통액션을 createAction으로 외부에서 생성하는 방법도 있음.
   extraReducers: (builder) => {
+    handleAddAsyncReducers(builder);
     builder
       .addCase('counter/increment', (state) => {
         console.log('increment');
