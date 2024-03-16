@@ -13,6 +13,7 @@ import toDoReducer from './features/toDo/toDoSlice';
 import toDoCounterReducer from './features/toDo/counterSlice';
 import counterA from './examples/counterA';
 import counterB from './examples/counterB';
+import { customLogger } from './middlewares/reduxMiddleare';
 
 /* 
 ***** 원시적인 리듀서 생성 방법
@@ -60,7 +61,18 @@ const reducer = createReducer([], {
 
 //Can use redux developer tools
 const store = configureStore({
-  reducer: { toDo: toDoReducer, counter: toDoCounterReducer, counterA, counterB },
+  //counterA, counterB제외
+  reducer: { toDo: toDoReducer, counter: toDoCounterReducer },
+
+  //preloadedState는 store가 생성되기 전에 설정되어 컴포넌트가 store를 구독하고 리렌더링되기 이전에 적절한 값을 할당함.
+  //페이지 초기화같은 상황에서 상태를 유지하고 싶을 때 각 리듀서의 initialState를 사용하게 되면
+  //각 슬라이스마다 API요청을 하거나 값을 받는 로직을 처리해야하게 되는데,
+  //preloadedState를 사용하면 로그인정보와 같은 서버나 저장소로부터 받아온 정보를 한 번에 preloadedState로 전달할 수 있다.
+  //만약 같이 사용할 때는 preloaded설정 우선.
+
+  //typescript에서는 스프레드를 사용하면 배열을 결합할 때 배열 type을 string이나 number로 확장시켜버리는 경우가 많다.
+  //예를 들어 타입이 정확히 1인 요소는 number|string이 된다
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(customLogger),
 });
 
 //toDoSlice의 프로퍼티들

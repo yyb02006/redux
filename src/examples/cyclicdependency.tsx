@@ -19,7 +19,8 @@ export default function CyclicDependency() {
     addTwo,
     addFive,
   };
-  const { counterA, counterB } = store.getState();
+  // const { counterA, counterB } = store.getState();
+  const [counterA, counterB] = ['1', '2'];
   return (
     <>
       <div className="App">

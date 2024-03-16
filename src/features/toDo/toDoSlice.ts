@@ -37,6 +37,7 @@ const promiseText = (text: string) =>
     }, 5000);
   });
 
+// async를 처리하는 미들웨어. createAsyncThunk로 만들어진 미들웨어는 이미 configureStore에 redux-thunk로 등록되어 있음
 export const addAsync = createAsyncThunk('toDo/addAsync', async (text: string) => {
   const response = await promiseText(text);
   return response;
@@ -94,7 +95,9 @@ export const { add, remove } = toDoSlice.actions;
 
 const myText = (state: ToDoState) => state.toDo.me;
 
-// thunk미들웨어
+// 동기적 로직을 가지는 thunk미들웨어. 별도의 생성자 제공이 없기 떄문에 createAsyncThunk를 async없이 손으로 작성하는 것에 가까움.
+// 디스패치에 직접 끼어들 수 있기 때문에 원포인트로 미들웨어가 필요할 때 사용 가능.
+// middleware의 프로퍼티에 등록될 수 없음.
 export const addIfNotString =
   (text: string): ToDoThunk =>
   (dispatch, getState) => {
