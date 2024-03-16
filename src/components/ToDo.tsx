@@ -23,7 +23,8 @@ export default function ToDo({ data: { id, text }, target }: ToDoProps) {
   );
 }
 
-/* const mapDispatchToProps = (dispatch: ToDoDispatch, ownProps: ToDoStateProps) => {
+/*
+const mapDispatchToProps = (dispatch: ToDoDispatch, ownProps: ToDoStateProps) => {
   // to be able to refer to a Callable Object. example: remove.type === "toDo/remove"
   console.log(remove.type);
   // also able to call a function remove Object. example: remove.match({type:'toDo/remove'}) === true
@@ -33,4 +34,5 @@ export default function ToDo({ data: { id, text }, target }: ToDoProps) {
       dispatch(remove(ownProps.id));
     },
   };
-}; */
+};
+*/

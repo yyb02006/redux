@@ -40,6 +40,7 @@ const promiseText = (text: string) =>
 // async를 처리하는 미들웨어. createAsyncThunk로 만들어진 미들웨어는 이미 configureStore에 redux-thunk로 등록되어 있음
 export const addAsync = createAsyncThunk('toDo/addAsync', async (text: string) => {
   const response = await promiseText(text);
+  console.log('run asyncThunk');
   return response;
 });
 
@@ -63,14 +64,14 @@ const toDoSlice = createSlice({
   initialState: toDoInitialState,
   reducers: {
     add: (state, action: PayloadAction<PayloadProps<string>>) => {
-      const { data, target } = action.payload;
-      state[target].push({ text: data, id: Date.now() });
+      const { data: text, target } = action.payload;
+      state[target].push({ text, id: Date.now() });
     },
     remove: (state, action: PayloadAction<PayloadProps<number>>) => {
-      const { data, target } = action.payload;
+      const { data: id, target } = action.payload;
       return {
         ...state,
-        [target]: state[target].filter((toDo) => toDo.id !== data),
+        [target]: state[target].filter((toDo) => toDo.id !== id),
       };
     },
   },
@@ -93,17 +94,36 @@ const toDoSlice = createSlice({
 
 export const { add, remove } = toDoSlice.actions;
 
+// `toDoSlice의 프로퍼티들
+// `const { actions, caseReducers, name, getInitialState, reducer } = toDoSlice;
+
+// 호출가능 객체(callable object) type과 paylaod를 가진 action을 리턴하며 match, toString, type과 같은 프로퍼티를 가지고 있음
+// console.log(actions);
+
+// 각 케이스 리듀서들
+// console.log(caseReducers);
+
+// 슬라이스객체의 이름
+// console.log(name);
+
+// 슬라이스객체의 초기값
+// console.log(getInitialState());
+
+// store에 전달될 데이터들
+// console.log(reducer);
+
 const myText = (state: ToDoState) => state.toDo.me;
 
 // 동기적 로직을 가지는 thunk미들웨어. 별도의 생성자 제공이 없기 떄문에 createAsyncThunk를 async없이 손으로 작성하는 것에 가까움.
 // 디스패치에 직접 끼어들 수 있기 때문에 원포인트로 미들웨어가 필요할 때 사용 가능.
 // middleware의 프로퍼티에 등록될 수 없음.
-export const addIfNotString =
-  (text: string): ToDoThunk =>
+export const abortAddIfNotString =
+  ({ data, target }: { data: string; target: ActionTarget }): ToDoThunk =>
   (dispatch, getState) => {
     const currentText = myText(getState());
     if (currentText.length > 0) {
-      dispatch(add({ data: text, target: 'me' }));
+      dispatch(add({ data: data, target }));
+      console.log(`${add.type} action success`);
     } else {
       console.log('fail');
     }

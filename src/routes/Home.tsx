@@ -1,8 +1,8 @@
-import React, { ChangeEvent, useState } from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 import { ToDoState } from '../store';
 import ToDo from '../components/ToDo';
 import { useToDoDispatch, useToDoSelector } from '../hooks/reduxHooks';
-import { ActionTarget, add, addIfNotString } from '../features/toDo/toDoSlice';
+import { ActionTarget, abortAddIfNotString, add } from '../features/toDo/toDoSlice';
 
 /* 
 기본적으로 아래처럼 사용할 수 있지만, 편의성을 위해 커스텀 훅의 사용을 추천
@@ -40,10 +40,21 @@ const List = ({ target }: { target: ActionTarget }) => {
   };
   const onAddClick = () => {
     setText('');
-    dispatch(add({ data: text, target }));
+    //thunk의 실행순서와 미들웨어의 실행순서 테스트
+    dispatch(abortAddIfNotString({ data: text, target }));
   };
-  const test = addIfNotString('something');
-  console.log(addIfNotString('something'));
+  const apiKey = process.env.REACT_APP_API_KEY;
+  useEffect(() => {
+    const getDogs = async () => {
+      try {
+        const respones = await (await fetch(`https://api.thecatapi.com/v1/images/search`)).json();
+        console.log(respones);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+    getDogs();
+  }, []);
   return (
     <section>
       <input type="text" placeholder="add your plan" value={text} onChange={onTextChange} />
