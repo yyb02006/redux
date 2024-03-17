@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useToDoDispatch } from '../hooks/reduxHooks';
+import { useAppDispatch } from '../hooks/reduxHooks';
 import { ActionTarget, ToDoStateProps, remove } from '../features/toDo/toDoSlice';
 
 interface ToDoProps {
@@ -9,7 +9,7 @@ interface ToDoProps {
 }
 
 export default function ToDo({ data: { id, text }, target }: ToDoProps) {
-  const dispatch = useToDoDispatch();
+  const dispatch = useAppDispatch();
   const onDeleteClick = () => {
     dispatch(remove({ data: id, target }));
   };

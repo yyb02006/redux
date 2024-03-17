@@ -1,5 +1,6 @@
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
-import { ToDoDispatch, ToDoState } from '../store';
+import { AppDispatch, RootState } from '../store';
 
-export const useToDoDispatch = () => useDispatch<ToDoDispatch>();
-export const useToDoSelector: TypedUseSelectorHook<ToDoState> = useSelector;
+// 컴포넌트가 상태를 구독하게 만드는 훅
+export const useAppDispatch = () => useDispatch<AppDispatch>();
+export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;

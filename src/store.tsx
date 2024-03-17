@@ -4,6 +4,8 @@ import toDoCounterReducer from './features/toDo/counterSlice';
 import counterA from './examples/counterA';
 import counterB from './examples/counterB';
 import { customLogger } from './middlewares/reduxMiddleare';
+import dogReducer from './features/toDo/dogSlice';
+import { sagaMiddleware } from './app/store';
 
 /* 
 ***** 원시적인 리듀서 생성 방법
@@ -52,7 +54,7 @@ const reducer = createReducer([], {
 //Can use redux developer tools
 const store = configureStore({
   //counterA, counterB제외
-  reducer: { toDo: toDoReducer, counter: toDoCounterReducer },
+  reducer: { toDo: toDoReducer, counter: toDoCounterReducer, dog: dogReducer },
 
   // preloadedState는 store가 생성되기 전에 설정되어 컴포넌트가 store를 구독하고 리렌더링되기 이전에 적절한 값을 할당함.
   // 페이지 초기화같은 상황에서 상태를 유지하고 싶을 때 각 리듀서의 initialState를 사용하게 되면
@@ -62,14 +64,15 @@ const store = configureStore({
 
   // typescript에서는 스프레드를 사용하면 배열을 결합할 때 배열 type을 string이나 number로 확장시켜버리는 경우가 많다.
   // 예를 들어 타입이 정확히 1인 요소는 number|string이 된다
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(customLogger),
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(sagaMiddleware).concat(customLogger),
 });
 
-export type ToDoDispatch = typeof store.dispatch;
-export type ToDoState = ReturnType<typeof store.getState>;
-export type ToDoThunk<ReturnType = void> = ThunkAction<
+export type AppDispatch = typeof store.dispatch;
+export type RootState = ReturnType<typeof store.getState>;
+export type AppThunk<ReturnType = void> = ThunkAction<
   ReturnType,
-  ToDoState,
+  RootState,
   unknown,
   Action<string>
 >;

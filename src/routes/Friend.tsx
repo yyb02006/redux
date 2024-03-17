@@ -1,10 +1,10 @@
 import React, { memo, useEffect } from 'react';
-import { useToDoDispatch, useToDoSelector } from '../hooks/reduxHooks';
+import { useAppDispatch, useAppSelector } from '../hooks/reduxHooks';
 import { add } from '../features/toDo/toDoSlice';
 import { increment } from '../features/toDo/counterSlice';
 
 const Child = memo(function Child() {
-  const toDos = useToDoSelector((state) => state.toDo.friend);
+  const toDos = useAppSelector((state) => state.toDo.friend);
   console.log('Child Component Rendered');
   return (
     <section
@@ -74,10 +74,10 @@ const someComponent = () => {
 */
 
 const Parent = () => {
-  const toDos = useToDoSelector((state) => state.toDo.me);
-  const counter = useToDoSelector((state) => state.counter);
+  const toDos = useAppSelector((state) => state.toDo.me);
+  const counter = useAppSelector((state) => state.counter);
   console.log(counter.count);
-  const dispatch = useToDoDispatch();
+  const dispatch = useAppDispatch();
   console.log('Parent Component Rendered');
   return (
     <section

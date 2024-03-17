@@ -1,6 +1,6 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import { useToDoDispatch } from '../hooks/reduxHooks';
+import { useAppDispatch } from '../hooks/reduxHooks';
 import { remove } from '../features/toDo/toDoSlice';
 
 /* type DeleteTodo = (id: number) => void;
@@ -10,7 +10,7 @@ interface DetailProps {
 } */
 
 export default function Detail() {
-  const dispatch = useToDoDispatch();
+  const dispatch = useAppDispatch();
   const { id } = useParams();
   return (
     <section>
