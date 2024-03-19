@@ -2,6 +2,7 @@ import React, { memo, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../hooks/reduxHooks';
 import { add } from '../features/toDo/toDoSlice';
 import { increment } from '../features/toDo/counterSlice';
+import Course from '../components/Course';
 
 const Child = memo(function Child() {
   const toDos = useAppSelector((state) => state.toDo.friend);
@@ -102,18 +103,21 @@ const Parent = () => {
 export default function Friend() {
   console.log('Container Component Rendered');
   return (
-    <section
-      style={{
-        width: '600px',
-        height: '600px',
-        backgroundColor: 'yellow',
-        fontSize: '2rem',
-        fontWeight: 600,
-        color: 'black',
-      }}
-    >
-      Friend
-      <Parent />
+    <section>
+      {/* <article
+        style={{
+          width: '600px',
+          height: '600px',
+          backgroundColor: 'yellow',
+          fontSize: '2rem',
+          fontWeight: 600,
+          color: 'black',
+        }}
+      >
+        Friend
+        <Parent />
+      </article> */}
+      <Course />
     </section>
   );
 }
