@@ -1,9 +1,5 @@
 import { call, put, takeEvery } from 'redux-saga/effects';
-import {
-  getDogUrlFulfilled,
-  getDogUrlPending,
-  getDogUrlRejected,
-} from '../features/toDo/dogSlice';
+import { getDogUrlFulfilled, getDogUrlPending, getDogUrlRejected } from '../features/toDo/dogSlice';
 
 interface ResponseType {
   id: string;
@@ -27,7 +23,7 @@ export const getDogUrl = async () => {
 };
 
 // action파라미터로 action을 가로챌 수 있음.
-// 미들웨어에 Promise객체가 들어가면 미들웨어는 Promise가 완료될 때까지 saga를 일시 중지함. (call yield까지 진행)
+// 미들웨어에 Promise객체가 들어가면 미들웨어는 Promise가 완료될 때까지 saga를 일시 중지함. (yield call(getDogUrl)까지 진행)
 // Promise가 resolve되면 saga가 재작동함. (다음 yield 실행)
 function* getDogUrlSaga() {
   try {
